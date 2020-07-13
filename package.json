@@ -1,0 +1,13 @@
+{
+  "name": "lab-aws-dockermachine",
+  "version": "1.0.0",
+  "description": "Laboratorio: Executar conteiner em instancias EC2 na aws com docker-machine.",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
