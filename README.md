@@ -12,7 +12,7 @@ Requisitos:
 3. O Load Balance será do tipo Application Load Balance direcionando o tráfego da porta 80 para as instâncias na porta 3000.
 4. As instâncias não podem expor os serviços direto para a internet.
 5. Ambas as instâncias irão rodar na região “us-east-1”
-6. Deverá rodar uma instância na availability zones us-east-1a e outra na us-east-1b
+6. Deverá rodar uma instância na availability zones us-east-1a e outra na us-east-1b. Garantindo a alta disponibilidade.
 
 ## Design final da solução
 
@@ -113,4 +113,24 @@ Para aumentar o desempenho da compilação, exclua arquivos e diretórios adicio
 Criei um .dockerignore com o diretório node_modules.
 
 
+## Build da aplicação e gerando a imagem docker
+
+Para gerar a imagem, basta digitar:
+
+
+```sh
+docker build -t myapp .
+docker run -d -p 3000:3000 myapp
+```
+
+
+## Testando local.
+
+Para testar abra o browser e digite: http://localhost:3000/ se tudo estiver correto deve retornar a data e hora:
+
+![](./img/app-datahora.png) 
+
+Para testar o health, no browser, digite ``` http://localhost:3000/health``` Deve retornar “ok”:
+
+![](./img/app-health.png) 
 
