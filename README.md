@@ -1,15 +1,11 @@
 # lab-aws-dockermachine
-> Laboratório com deploy de container em instância AWS EC2 utilizando docker-machine.
+> Este laboratório demonstrar como fazer deploy de container, em instância AWS EC2, com o utilitário docker-machine e como preparar o ambiente para alta disponibilidade utilizando um Load Balance. 
 
 
-## Objetivo
-
-Objetivo: Rodar uma aplicação node.js em duas instâncias EC2 configuradas para alta disponibilidade, utilizando um Load Balance para expor para internet.
-
-Requisitos:
+## Requisitos
 1. Deve ser gerada imagem docker com a aplicação rodando na porta 3000.
-2. As instâncias EC2 serão geradas e configuradas pelo docker-machine.
-3. O Load Balance será do tipo Application Load Balance direcionando o tráfego da porta 80 para as instâncias na porta 3000.
+2. As instâncias EC2 serão criadas e configuradas pelo docker-machine.
+3. O Load Balance será do tipo Application Load Balance direcionando todo o tráfego da porta 80 para as instâncias na porta 3000.
 4. As instâncias não podem expor os serviços direto para a internet.
 5. Ambas as instâncias irão rodar na região “us-east-1”
 6. Deverá rodar uma instância na availability zones us-east-1a e outra na us-east-1b. Garantindo a alta disponibilidade.
@@ -29,31 +25,28 @@ Ferramentas necessárias para o laboratório:
 - [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 
 ## Criar a aplicação node.js
-Para este laboratório será criado uma aplicação simples, desenvolvida em node.js, que irá conter dois endpoints um para health check e o outra será funcionalidade propriamente dita. A funcionalidade será um relógio que ao chamar o endpoint retorno a data e hora atual.
+Para este laboratório será criado uma aplicação simples, desenvolvida em node.js, que irá conter dois endpoints um para health check e o outra será funcionalidade que ao chamar o endpoint retorno a data e hora atual.
 
-Primeiro passo é criar o diretório do projeto e depois acessá-lo:
+Para criar o projeto, o primeiro passo é criar o diretório e depois acessá-lo:
 ```sh
 mkdir lab-aws-dockermachine
 cd lab-aws-dockermachine
 ```  
 
-Agora precisamos criar o arquivo package.json, para início digite: 
-
+Agora precisamos criar o arquivo package.json, fazemos isso com o comando: 
 ```sh
 yarn init
 ```
-
-Aproveite e instale o express, com  o comando:
+Após responder as questões o aquivo será criado.
+Agora precisamos instalar o express:
 
 ```sh
 yarn add express
 ```
 
-
-Abra seu editor/IDE favorita.
-
-Criei um arquivo chamado index.js e adicionei o código da aplicação:
-
+Abra seu editor/IDE favorita. Apontando para o diretório do projeto.
+Para essa aplicação vou criar um único arquivo chamado index.js.
+Abaixo como ficou o código:
 ```javascript
 const express = require('express')
 
