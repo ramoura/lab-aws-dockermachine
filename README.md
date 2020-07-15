@@ -228,3 +228,17 @@ Com isso só será possível chegar ao serviço utilizando o Load Balance.
 
 ## Conclusão
 
+O docker-machine facilita o trabalho quando queremos rodar container em servidores na Cloud, nosso exemplo foi utilizado a AWS, mas ele também é capaz de trabalhar com outras Clouds.
+
+Aplicamos um conceito básico de alta disponibilidade utilizando duas instâncias EC2, cada uma em uma Zona de disponibilidade diferente.
+
+## Faxina
+
+Por último, se você estiver criando esse ambiente apenas para teste, não se esqueça de fazer uma faxina quando terminar. 
+
+Um check-list para não esquecer o que deve ser deletado:
+-   As duas instâncias (aws-myapp-a e aws-myapp-b);
+-   O security group (docker-machine);
+-   O load lalance(alb-myapp);e
+-   O target group(targetgroup-myapp).
+
