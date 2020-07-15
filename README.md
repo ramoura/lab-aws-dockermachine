@@ -41,9 +41,11 @@ Ferramentas necessárias para o laboratório:
 - [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 
 ## Criando a aplicação
-Para este laboratório será criado uma aplicação simples, desenvolvida em node.js, que irá conter dois endpoints um para health check e o outra será funcionalidade que ao chamar o endpoint retorno a data e hora atual.
+Para este laboratório será criado uma aplicação simples escutando a porta 3000. O aplicativo irá responder a duas URLs: 
+1. GET /health:  respondendo “ok” utilizada para _health check_ da aplicação
+2. GET /: que responde com a data e hora atual do servidor.
 
-Para criar o projeto, o primeiro passo é criar o diretório e depois acessá-lo:
+Para iniciar o projeto, o primeiro passo é criar o diretório e depois acessá-lo:
 ```sh
 mkdir lab-aws-dockermachine
 cd lab-aws-dockermachine
@@ -53,15 +55,14 @@ Agora precisamos criar o arquivo package.json, fazemos isso com o comando:
 ```sh
 yarn init
 ```
-Após responder as questões o aquivo será criado.
-Agora precisamos instalar o express:
+Após responder as questões o arquivo será criado.
 
+Para criar as rotas vou utilizar a lib express:
 ```sh
 yarn add express
 ```
 
-Abra seu editor/IDE favorita. Apontando para o diretório do projeto.
-Para essa aplicação vou criar um único arquivo chamado index.js.
+Para essa aplicação, vou criar um único arquivo chamado index.js.
 Abaixo como ficou o código:
 ```javascript
 const express = require('express')
@@ -74,19 +75,13 @@ app.get('/', (req, res) => res.send("Now: "+ new Date()));
 app.listen(3000);
 ```
 
-Uma rápida explicação do código:
 
-....
-
-Também alterei o package.json, adicionando um scritp para start da aplicação:
+Vou aproveitar e alterar o package.json, adicionando um scritp para start da aplicação:
 
 ```json
-…
- "license": "MIT",
   "scripts": {
     "start": "node index.js"
   },
-...
 ```
 Assim para rodar a aplicação é só digitar ``` yarn start ```.
 
