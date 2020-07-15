@@ -158,7 +158,7 @@ A partir de agora todo o comando docker será executado na instância EC2. Entã
 docker build -t myapp .
 docker run -p 3000:3000 myapp -d
 ```
-Pronto o contêiner já está rodando com a aplicação, para provar isso vamos fazer um teste chamando a aplicação. Primeiro vamos descobrir qual o ip público da instância com o comando:
+Pronto, o contêiner já está rodando com a aplicação e para provar isso vamos fazer um teste chamando a aplicação. Primeiro vamos descobrir qual o ip público da instância com o comando:
 ```sh
 docker-machine ip aws-myapp-a
 ```
@@ -167,7 +167,7 @@ No meu caso foi “3.87.154.248” agora abra o navegador e digite http://3.87.1
 ![](./img/myapp-prd.png)
 
 
-Agora é preciso subir a aplicação da outra instância, abra outro terminal e digite  os comandos:
+Agora é preciso criar a imagem da aplicação da outra instância e iniciar o contêiner, para isso, abra outro terminal e digite  os comandos:
 
 ```sh
 eval $(docker-machine env aws-myapp-b)
@@ -175,14 +175,15 @@ docker build -t myapp .
 docker run -d -p 3000:3000 myapp
 docker-machine ip aws-myapp-b
 ```
-
+Agora, com o ip público, podemos testa a aplicação nessa instância.
 
 Resumos até aqui:
-Duas instâncias, cada uma em uma AZ, rodando a aplicação exposta na porta 3000.
+Foram criadas duas instâncias, cada uma em uma AZ, rodando a aplicação exposta na porta 3000.
+
 Os próximos passos são:
 
--Configurar um load balance
--Alterar o Security Group das instâncias para permitir conexões na porta 3000 apenas originadas do Load Balance.
+1. Configurar um Load Balance
+2. Alterar o Security Group das instâncias para permitir conexões na porta 3000 apenas originadas do Load Balance.
 
 ## Configurando Load Balance
 
