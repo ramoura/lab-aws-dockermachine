@@ -182,8 +182,18 @@ Duas instâncias, cada uma em uma AZ, rodando a aplicação exposta na porta 300
 Os próximos passos são:
 
 -Configurar um load balance
--Alterar o SG das instâncias para permitir conexões na porta 3000 apenas originadas do LB.
+-Alterar o Security Group das instâncias para permitir conexões na porta 3000 apenas originadas do Load Balance.
 
 ## Configurando Load Balance
 
 ![](./img/ConfigurandoLB.gif)
+
+## Ajustando o Security Group das instâncias.
+
+Para atender o requisito 4 devemos ajustar o Security Group das instâncias para permitir conexões na porta 3000 apenas originadas do Load Balance.  
+
+![](./img/Ajuste_Teste_Final.gif)
+
+Assim só é possível chegar ao serviço utilizando o Load Balance.
+
+
