@@ -57,13 +57,13 @@ yarn init
 ```
 Após responder as questões o arquivo será criado.
 
-Para criar as rotas vou utilizar a lib express:
+Utilizarei a lib *express* para criar as rotas:
 ```sh
 yarn add express
 ```
 
-Para essa aplicação, vou criar um único arquivo chamado index.js.
-Abaixo como ficou o código:
+Para essa aplicação, irei criar um único arquivo chamado index.js. Abaixo como ficou o código:
+
 ```javascript
 const express = require('express')
 
@@ -83,7 +83,7 @@ Vou aproveitar e alterar o package.json, adicionando um scritp para start da apl
     "start": "node index.js"
   },
 ```
-Assim para rodar a aplicação é só digitar ``` yarn start ```.
+Assim, facilita iniciar a aplicação basta digitar ``` yarn start ```.
 
 Abaixo como ficou a estrutura do meu projeto:
 
@@ -140,10 +140,20 @@ Para testar o health, no browser, digite ``` http://localhost:3000/health``` Dev
 
 ## Criando as instâncias com docker-machine
 
+Como o docker-machine utiliza o cli da aws, para executar os comandos, antes de iniciar certifique que a aws-cli esteja instalado e configurado. Para configurar acesso o link(https://docs.aws.amazon.com/pt_br/cli/latest/userguide/cli-configure-quickstart.html).
+
+Após configurações feitas, é hora de criar as instâncias EC2.
+
 ```sh
 docker-machine create --driver amazonec2 --amazonec2-open-port 3000 --amazonec2-region us-east-1 --amazonec2-zone a aws-myapp-a
 docker-machine create --driver amazonec2 --amazonec2-open-port 3000 --amazonec2-region us-east-1 --amazonec2-zone b aws-myapp-b
 ``` 
+
+Abaixo uma breve descrição para cada parametro:
+-   **--driver**: É o drive para as configurações da Cloud. 
+-   **--amazonec2-open-port**: Essa porta será liberada no Security Group para as instâncias.
+-   **--amazonec2-region**: Região onde será criada as instâncias.
+-   **--amazonec2-zone**: É a zona de disponibilidade onde será criada as instâncias.
 
 Serão criadas duas instâncias na AWS:
 ![](./img/instances_aws.png) 
@@ -153,33 +163,32 @@ Támbem será criado um Security Group com o nome docker-machine:
 
 ## Configurando e subindo a aplicação
 
-Para configurar o docker local apontando para a instância EC2 digite:
+Agora precisamos o docker local apontando para a instância EC2, para isso digite:
 ```sh
 docker-machine env aws-myapp-a
 ```
 
-Será apresentada as variáveis que devem ser configuradas, para poupar esforço é possível fazer tudo apenas com o comando:
-
+Será apresentada as variáveis de ambiente que devem ser configuradas. Para poupar esforço é possível fazer essa configuração apenas com o comando:
 ```sh
 eval $(docker-machine env aws-myapp-a)
 ```
-A partir de agora todo o comando docker será executado na instância EC2. Então bora subir nosso conteirer, para isso é so repetir os comando feitos para rodar local:
+
+A partir de agora, todos os comandos docker serão executados na instância EC2. Então, bora subir nosso conteirer, para isso é so fazer o build da imagem e rodar a aplicação, com os comandos abaixo:
 
 ```sh
 docker build -t myapp .
-docker run -p 3000:3000 myapp -d
+docker run -d -p 3000:3000 myapp
 ```
-Pronto, o contêiner já está rodando com a aplicação e para provar isso vamos fazer um teste chamando a aplicação. Primeiro vamos descobrir qual o ip público da instância com o comando:
+Pronto, o contêiner já está rodando e para provar isso vamos fazer um teste. Primeiro vamos descobrir qual o ip público da instância com o comando:
+
 ```sh
 docker-machine ip aws-myapp-a
 ```
 
-No meu caso foi “3.87.154.248” agora abra o navegador e digite http://3.87.154.248:3000/
+No meu caso foi “3.87.154.248”. Abra o navegador e digite http://3.87.154.248:3000/
 ![](./img/myapp-prd.png)
 
-
-Agora é preciso criar a imagem da aplicação da outra instância e iniciar o contêiner, para isso, abra outro terminal e digite  os comandos:
-
+Agora é preciso fazer o mesmo com a outra instância, com os comandos:
 ```sh
 eval $(docker-machine env aws-myapp-b)
 docker build -t myapp .
@@ -189,23 +198,32 @@ docker-machine ip aws-myapp-b
 Agora, com o ip público, podemos testa a aplicação nessa instância.
 
 Resumos até aqui:
-Foram criadas duas instâncias, cada uma em uma AZ, rodando a aplicação exposta na porta 3000.
+Foram criadas duas instâncias, cada uma em uma AZ, rodando um contêiner com a aplicação.
 
 Os próximos passos são:
 
-1. Configurar um Load Balance
+1. Configurar um Load Balance;
 2. Alterar o Security Group das instâncias para permitir conexões na porta 3000 apenas originadas do Load Balance.
 
 ## Configurando Load Balance
 
-![](./img/ConfigurandoLB.gif)
+Para criar o Load Balance, acesso o painel da AWS, depois entre no dashboard de EC2. Na barra lateral esquerda localize a opção Load Balance. 
+
+Abaixo um video que eu fiz configurando o meu LB.
+
+[](./img/ConfigurandoLB.gif)
+
+O mais importante é na parte do Target Group, não esqueça de colocar o tipo Instance e a porta é a 3000. 
+Depois em Register precisa selecionar as duas instâncias e clicar no botão "Add to register".  
+
 
 ## Ajustando o Security Group das instâncias.
 
-Para atender o requisito 4 devemos ajustar o Security Group das instâncias para permitir conexões na porta 3000 apenas originadas do Load Balance.  
+Para atender o requisito 4 devemos ajustar o Security Group, das instâncias, permitindo que apenas o Load Balance acesse a porta 3000.  
 
-![](./img/Ajuste_Teste_Final.gif)
+[](./img/Ajuste_Teste_Final.gif)
 
-Assim só é possível chegar ao serviço utilizando o Load Balance.
+Com isso só será possível chegar ao serviço utilizando o Load Balance.
 
+## Conclusão
 
