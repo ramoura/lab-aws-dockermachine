@@ -213,7 +213,8 @@ Abaixo um video que eu fiz configurando o meu LB.
 
 ![](./img/ConfigurandoLB.gif)
 
-O mais importante é na parte do Target Group, não esqueça de colocar o tipo Instance e a porta é a 3000. 
+Os detalhes mais importantes estão no Target Group, não esqueça de colocar o tipo Instance e a porta 3000.
+ 
 Depois em Register precisa selecionar as duas instâncias e clicar no botão "Add to register".  
 
 
