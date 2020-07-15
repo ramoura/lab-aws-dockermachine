@@ -134,3 +134,63 @@ Para testar o health, no browser, digite ``` http://localhost:3000/health``` Dev
 
 ![](./img/app-health.png) 
 
+## Criando as instâncias com docker-machine
+
+```sh
+docker-machine create --driver amazonec2 --amazonec2-open-port 3000 --amazonec2-region us-east-1 --amazonec2-zone a aws-myapp-a
+docker-machine create --driver amazonec2 --amazonec2-open-port 3000 --amazonec2-region us-east-1 --amazonec2-zone b aws-myapp-b
+``` 
+
+Serão criadas duas instâncias na AWS:
+![](./img/instances_aws.png) 
+
+Támbem será criado um Security Group com o nome docker-machine:
+![](./img/security_group.png) 
+
+## Configurando e subindo a aplicação
+
+Para configurar o docker local apontando para a instância EC2 digite:
+```sh
+docker-machine env aws-myapp-a
+```
+
+Será apresentada as variáveis que devem ser configuradas, para poupar esforço é possível fazer tudo apenas com o comando:
+
+```sh
+eval $(docker-machine env aws-myapp-a)
+```
+A partir de agora todo o comando docker será executado na instância EC2. Então bora subir nosso conteirer, para isso é so repetir os comando feitos para rodar local:
+
+```sh
+docker build -t myapp .
+docker run -p 3000:3000 myapp -d
+```
+Pronto o contêiner já está rodando com a aplicação, para provar isso vamos fazer um teste chamando a aplicação. Primeiro vamos descobrir qual o ip público da instância com o comando:
+```sh
+docker-machine ip aws-myapp-a
+```
+
+No meu caso foi “3.87.154.248” agora abra o navegador e digite http://3.87.154.248:3000/
+![](./img/myapp-prd.png)
+
+
+Agora é preciso subir a aplicação da outra instância, abra outro terminal e digite  os comandos:
+
+```sh
+eval $(docker-machine env aws-myapp-b)
+docker build -t myapp .
+docker run -d -p 3000:3000 myapp
+docker-machine ip aws-myapp-b
+```
+
+
+Resumos até aqui:
+Duas instâncias, cada uma em uma AZ, rodando a aplicação exposta na porta 3000.
+Os próximos passos são:
+
+-Configurar um load balance
+-Alterar o SG das instâncias para permitir conexões na porta 3000 apenas originadas do LB.
+
+## Configurando Load Balance
+
+![](./img/ConfigurandoLB.gif)
