@@ -1,6 +1,22 @@
 # lab-aws-dockermachine
 > Este laboratório demonstrar como fazer deploy de container, em instância AWS EC2, com o utilitário docker-machine e como preparar o ambiente para alta disponibilidade utilizando um Load Balance. 
 
+Tabela de conteúdos
+=================
+<!--ts-->
+   * [Requisitos](#requisitos)
+   * [Design final da solução](#design-final-da-solução)
+   * [Configurações](#configurações)
+   * [Criando a aplicação](#criar-a-aplicação)
+   * [Criando o Dockerfile](#criar-o-dockerfile)
+   * [Build da aplicação e gerando a imagem docker](#build-da-aplicação-e-gerando-a-imagem-docker)
+   * [Testando local](#testando-local)
+   * [Criando as instâncias com docker-machine](#criando-as-instâncias-com-docker-machine)
+   * [Configurando e subindo a aplicação](#configurando-e-subindo-a-aplicação)
+   * [Configurando Load Balance](#configurando-load-balance)
+   * [Ajustando o Security Group das instâncias.](#ajustando-o-security-group-das-instâncias)
+<!--te-->
+
 
 ## Requisitos
 1. Deve ser gerada imagem docker com a aplicação rodando na porta 3000.
@@ -24,7 +40,7 @@ Ferramentas necessárias para o laboratório:
 - [docker-machine](https://docs.docker.com/machine/install-machine/)
 - [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 
-## Criar a aplicação node.js
+## Criando a aplicação
 Para este laboratório será criado uma aplicação simples, desenvolvida em node.js, que irá conter dois endpoints um para health check e o outra será funcionalidade que ao chamar o endpoint retorno a data e hora atual.
 
 Para criar o projeto, o primeiro passo é criar o diretório e depois acessá-lo:
@@ -80,7 +96,7 @@ Abaixo como ficou a estrutura do meu projeto:
 
 
 
-## Criar o Dockerfile.
+## Criando o Dockerfile
 
 O Dockerfile é um arquivo texto que contém os comandos utilizados pelo Docker para gerar a imagem, isso inclui instalação de pacotes, criação de diretórios e definição de variáveis de ambiente entre outras coisas. 
 
@@ -117,7 +133,7 @@ docker run -d -p 3000:3000 myapp
 ```
 
 
-## Testando local.
+## Testando local
 
 Para testar abra o browser e digite: http://localhost:3000/ se tudo estiver correto deve retornar a data e hora:
 
