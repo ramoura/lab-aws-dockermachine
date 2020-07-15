@@ -211,7 +211,7 @@ Para criar o Load Balance, acesso o painel da AWS, depois entre no dashboard de 
 
 Abaixo um video que eu fiz configurando o meu LB.
 
-[](./img/ConfigurandoLB.gif)
+![](./img/ConfigurandoLB.gif)
 
 O mais importante é na parte do Target Group, não esqueça de colocar o tipo Instance e a porta é a 3000. 
 Depois em Register precisa selecionar as duas instâncias e clicar no botão "Add to register".  
@@ -221,7 +221,7 @@ Depois em Register precisa selecionar as duas instâncias e clicar no botão "Ad
 
 Para atender o requisito 4 devemos ajustar o Security Group, das instâncias, permitindo que apenas o Load Balance acesse a porta 3000.  
 
-[](./img/Ajuste_Teste_Final.gif)
+![](./img/Ajuste_Teste_Final.gif)
 
 Com isso só será possível chegar ao serviço utilizando o Load Balance.
 
